@@ -2,8 +2,10 @@ import express from "express";
 import { get, merge } from "lodash";
 
 import { getUserBySessionToken } from "../db/users";
+import { getPlaceByUserAndName } from "../db/places";
+import { UserSchema } from "./../db/users";
 
-export const isOwner = async (
+export const isOwnerOfUser = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -23,12 +25,37 @@ export const isOwner = async (
   }
   next();
 };
+
+// export const isOwnerOfPlace = async (
+//   req: express.Request,
+//   res: express.Response,
+//   next: express.NextFunction
+// ) => {
+//   try {
+//     const { name } = req.params;
+//     const currentUser = get(req, "identity") as typeof UserSchema;
+//     const place = await getPlaceByUserAndName(name, currentUser);
+//     // const id = get(place, "user") as unknown as string;
+//     // console.log(id);
+//     console.log(currentUser);
+//     if (!currentUser) {
+//       return res.sendStatus(403);
+//     }
+//     if (!place) {
+//       return res.sendStatus(404);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(400);
+//   }
+//   next();
+// };
+
 export const isAuthenticated = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
-  console.log("auth 1");
   try {
     const sessionToken = req.cookies["Flori-Auth"];
 
@@ -43,6 +70,7 @@ export const isAuthenticated = async (
     }
 
     merge(req, { identity: existingUser });
+
     return next();
   } catch (error) {
     console.log(error);

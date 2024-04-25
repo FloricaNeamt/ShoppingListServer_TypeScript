@@ -6,6 +6,7 @@ import compression from "compression";
 import cors from "cors";
 import mongoose from "mongoose";
 import router from "./router";
+import config from "config";
 
 const app = express();
 app.use(
@@ -24,7 +25,7 @@ server.listen(3900, () => {
   console.log("Server running on http://localhost:3900/");
 });
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/shoppingList_typeScript";
+const MONGO_URL = config.get("db").toString();
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL);

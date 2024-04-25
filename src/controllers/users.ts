@@ -1,6 +1,11 @@
 import express from "express";
 
-import { deleteUserById, getUserById, getUsers } from "../db/users";
+import {
+  deleteUserById,
+  getUserById,
+  getUserBySessionToken,
+  getUsers,
+} from "../db/users";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -10,6 +15,19 @@ export const getAllUsers = async (
     const users = await getUsers();
 
     return res.status(200).json(users).end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+};
+
+export const getMe = async (req: express.Request, res: express.Response) => {
+  try {
+    const sessionToken = req.cookies["Flori-Auth"];
+
+    const existingUser = await getUserBySessionToken(sessionToken);
+
+    return res.status(200).json(existingUser).end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
