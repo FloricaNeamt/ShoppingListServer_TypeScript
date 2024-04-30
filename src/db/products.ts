@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-//I want a limonade.. 🍸🍋🍹
+//I want a lemonade.. 🍸🍋🍹
 const PlaceSchema = new mongoose.Schema({
   name: { type: String, required: true },
 });

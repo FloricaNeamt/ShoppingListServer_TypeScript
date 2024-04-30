@@ -20,7 +20,7 @@ export const getAllPlacesforLoggedUser = async (
 
     return res.status(200).json(places).end();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
@@ -45,7 +45,7 @@ export const addPlace = async (req: express.Request, res: express.Response) => {
 
     return res.status(200).json(place);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
@@ -62,7 +62,7 @@ export const deletePlace = async (
     const deletedUser = await deletePlaceByName(name, user);
     return res.json(deletedUser);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
@@ -83,7 +83,7 @@ export const updatePlace = async (
 
     return res.status(200).json(place).end();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };

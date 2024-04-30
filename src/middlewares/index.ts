@@ -20,36 +20,11 @@ export const isOwnerOfUser = async (
       return res.sendStatus(403);
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
   next();
 };
-
-// export const isOwnerOfPlace = async (
-//   req: express.Request,
-//   res: express.Response,
-//   next: express.NextFunction
-// ) => {
-//   try {
-//     const { name } = req.params;
-//     const currentUser = get(req, "identity") as typeof UserSchema;
-//     const place = await getPlaceByUserAndName(name, currentUser);
-//     // const id = get(place, "user") as unknown as string;
-//     // console.log(id);
-//     console.log(currentUser);
-//     if (!currentUser) {
-//       return res.sendStatus(403);
-//     }
-//     if (!place) {
-//       return res.sendStatus(404);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(400);
-//   }
-//   next();
-// };
 
 export const isAuthenticated = async (
   req: express.Request,
@@ -73,7 +48,7 @@ export const isAuthenticated = async (
 
     return next();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };

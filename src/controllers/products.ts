@@ -9,18 +9,20 @@ import express from "express";
 import { get, merge } from "lodash";
 import { getPlaceByUserAndName, UserSchema, PlaceSchema } from "../db/places";
 
-export const getAllProducts = async (req: any, res: express.Response) => {
+export const getAllProducts = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const currentUser = get(req, "identity") as typeof UserSchema;
     if (!currentUser) return res.sendStatus(403);
 
     const { place: placeName } = req.query;
     const place = (await getPlaceByUserAndName(
-      placeName,
+      placeName.toString(),
       currentUser
     )) as unknown as typeof PlaceSchema;
-    // const place1 = get(place) as typeof PlaceSchema;
-    // console.log(place1);
+
     const products = await getProductsByPlace(place);
     if (products.length === 0) {
       return res
@@ -38,17 +40,9 @@ export const addProduct = async (
   req: express.Request,
   res: express.Response
 ) => {
-  //iau din body campurile:name,category,quantity
-  //si din query iau place-ul numele
-  //determin user, ca sa pot afla place complet
-  //determin place-ul complet
-  //verific daca produsul mai exista in place-ul curent
-
   try {
     const { name, category, quantity } = req.body;
-    if (!name) res.sendStatus(400);
-    if (!quantity) res.sendStatus(400);
-    if (!category) res.sendStatus(400);
+    if (!name || !category || !quantity) res.sendStatus(400);
     const { place: placeName } = req.query;
     if (!placeName) {
       return res.sendStatus(400);
@@ -72,9 +66,9 @@ export const addProduct = async (
       place: currentPlace,
     });
 
-    return res.status(200).json(product).end;
+    return res.status(200).json(product).end();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
@@ -87,13 +81,13 @@ export const updateProduct = async (
     const { name: productName } = req.params;
     if (!productName) return res.sendStatus(400);
 
-    const currentUser = get(req, "identity") as typeof UserSchema;
-    if (!currentUser) return res.sendStatus(403);
-
     const { place: placeName } = req.query;
     if (!placeName) {
       return res.sendStatus(400);
     }
+
+    const currentUser = get(req, "identity") as typeof UserSchema;
+    if (!currentUser) return res.sendStatus(403);
 
     const { name, quantity, category } = req.body;
     if (!name) res.sendStatus(400);
@@ -119,7 +113,7 @@ export const updateProduct = async (
 
     return res.status(200).json(product);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
@@ -147,7 +141,7 @@ export const deleteProduct = async (
     const deletedUser = await deleteProductByName(productName, place);
     return res.json(deletedUser);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };

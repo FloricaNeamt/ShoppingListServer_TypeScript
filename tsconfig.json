@@ -6,7 +6,8 @@
     "outDir": "dist",
     "sourceMap": true,
     "noImplicitAny": true,
-    "target": "es6"
+    "target": "es6",
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

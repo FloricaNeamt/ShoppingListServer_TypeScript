@@ -16,12 +16,15 @@ export const getAllUsers = async (
 
     return res.status(200).json(users).end();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
 
-export const getMe = async (req: express.Request, res: express.Response) => {
+export const getCurrentUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const sessionToken = req.cookies["Flori-Auth"];
 
@@ -29,12 +32,12 @@ export const getMe = async (req: express.Request, res: express.Response) => {
 
     return res.status(200).json(existingUser).end();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
 
-export const deleteUsers = async (
+export const deleteUser = async (
   req: express.Request,
   res: express.Response
 ) => {
@@ -43,7 +46,7 @@ export const deleteUsers = async (
     const deletedUser = await deleteUserById(id);
     return res.json(deletedUser);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
@@ -54,11 +57,10 @@ export const updateUser = async (
 ) => {
   try {
     const { id } = req.params;
-    const { username } = req.body;
+    if (!id) res.sendStatus(400);
 
-    if (!username) {
-      res.sendStatus(400);
-    }
+    const { username } = req.body;
+    if (!username) res.sendStatus(400);
 
     const user = await getUserById(id);
 
@@ -69,7 +71,7 @@ export const updateUser = async (
 
     return res.status(200).json(user).end();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return res.sendStatus(400);
   }
 };
