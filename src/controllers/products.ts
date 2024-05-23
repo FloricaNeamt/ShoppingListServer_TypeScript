@@ -1,5 +1,5 @@
 import {
-  getProductsByPlace,
+  getProducts,
   createProduct,
   getProductByNameAndPlace,
   deleteProductByName,
@@ -7,7 +7,8 @@ import {
 } from "../db/products";
 import express from "express";
 import { get, merge } from "lodash";
-import { getPlaceByUserAndName, UserSchema, PlaceSchema } from "../db/places";
+import { getPlaceByUserAndId, UserSchema, PlaceSchema } from "../db/places";
+import { ObjectId } from "mongodb";
 
 export const getAllProducts = async (
   req: express.Request,
@@ -17,13 +18,7 @@ export const getAllProducts = async (
     const currentUser = get(req, "identity") as typeof UserSchema;
     if (!currentUser) return res.sendStatus(403);
 
-    const { place: placeName } = req.query;
-    const place = (await getPlaceByUserAndName(
-      placeName.toString(),
-      currentUser
-    )) as unknown as typeof PlaceSchema;
-
-    const products = await getProductsByPlace(place);
+    const products = await getProducts(currentUser);
     if (products.length === 0) {
       return res
         .status(404)
@@ -41,18 +36,19 @@ export const addProduct = async (
   res: express.Response
 ) => {
   try {
-    const { name, category, quantity } = req.body;
-    if (!name || !category || !quantity) res.sendStatus(400);
-    const { place: placeName } = req.query;
-    if (!placeName) {
+    const { name, category, quantity, placeId } = req.body;
+    if (!name || !category || !quantity || !placeId) res.sendStatus(400);
+
+    if (!placeId) {
       return res.sendStatus(400);
     }
+
     const currentUser = get(req, "identity") as typeof UserSchema;
     if (!currentUser) return res.sendStatus(403);
 
-    const currentPlace = (await getPlaceByUserAndName(
-      placeName.toString(),
-      currentUser
+    const currentPlace = (await getPlaceByUserAndId(
+      currentUser,
+      placeId.toString()
     )) as unknown as typeof PlaceSchema;
     if (!currentPlace) return res.sendStatus(400);
 
@@ -81,8 +77,8 @@ export const updateProduct = async (
     const { name: productName } = req.params;
     if (!productName) return res.sendStatus(400);
 
-    const { place: placeName } = req.query;
-    if (!placeName) {
+    const { place: placeId } = req.query;
+    if (!placeId) {
       return res.sendStatus(400);
     }
 
@@ -94,9 +90,9 @@ export const updateProduct = async (
     if (!quantity) res.sendStatus(400);
     if (!category) res.sendStatus(400);
 
-    const currentPlace = (await getPlaceByUserAndName(
-      placeName.toString(),
-      currentUser
+    const currentPlace = (await getPlaceByUserAndId(
+      currentUser,
+      placeId.toString()
     )) as unknown as typeof PlaceSchema;
 
     const existingProduct = await getProductByNameAndPlace(name, currentPlace);
@@ -129,10 +125,11 @@ export const deleteProduct = async (
     const user = get(req, "identity") as typeof UserSchema;
     if (!user) return res.sendStatus(403);
 
-    const { place: placeName } = req.query;
-    const place = (await getPlaceByUserAndName(
-      placeName.toString(),
-      user
+    const { place: placeId } = req.query;
+
+    const place = (await getPlaceByUserAndId(
+      user,
+      placeId.toString()
     )) as unknown as typeof PlaceSchema;
 
     const existingProduct = await getProductByNameAndPlace(productName, place);

@@ -2,8 +2,6 @@ import express from "express";
 import { get, merge } from "lodash";
 
 import { getUserBySessionToken } from "../db/users";
-import { getPlaceByUserAndName } from "../db/places";
-import { UserSchema } from "./../db/users";
 
 export const isOwnerOfUser = async (
   req: express.Request,

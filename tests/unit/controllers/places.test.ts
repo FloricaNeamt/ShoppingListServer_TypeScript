@@ -7,17 +7,17 @@ import {
 } from "../../../src/controllers/places";
 import {
   createPlace,
-  getPlacesForUser,
-  getPlaceByUserAndName,
+  getPlacesByUser,
+  getPlaceByUserAndId,
   deletePlaceByName,
   updatePlaceByName,
 } from "../../../src/db/places";
-import { mockUser, mockPlaces, mockPlace, mockPlace1 } from "../dataMocks";
+import { mockUser, mockPlaces, mockPlace, mockPlace1 } from "../../dataMocks";
 
 jest.mock("../../../src/db/places", () => ({
   createPlace: jest.fn(),
-  getPlacesForUser: jest.fn(),
-  getPlaceByUserAndName: jest.fn(),
+  getPlacesByUser: jest.fn(),
+  getPlaceByUserAndId: jest.fn(),
   deletePlaceByName: jest.fn(),
   updatePlaceByName: jest.fn(),
 }));
@@ -41,7 +41,7 @@ describe("Place Controller functions", () => {
 
   describe(" Get all places for logged user function", () => {
     it("should set session token cookie and return user data if login is successful", async () => {
-      (getPlacesForUser as jest.Mock).mockResolvedValueOnce(mockPlaces);
+      (getPlacesByUser as jest.Mock).mockResolvedValueOnce(mockPlaces);
 
       await getAllPlacesforLoggedUser(reqMock, resMock);
 
@@ -59,7 +59,7 @@ describe("Place Controller functions", () => {
       expect(resMock.sendStatus).toHaveBeenCalledWith(403);
     });
     it("should return status 400 if an error occurs", async () => {
-      (getPlacesForUser as jest.Mock).mockRejectedValueOnce(
+      (getPlacesByUser as jest.Mock).mockRejectedValueOnce(
         new Error("Test error")
       );
 
@@ -71,7 +71,7 @@ describe("Place Controller functions", () => {
 
   describe("Add Place function", () => {
     it("should create new place and return it if successful", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValue(null);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValue(null);
       (createPlace as jest.Mock).mockResolvedValue(mockPlace);
 
       await addPlace(reqMock, resMock);
@@ -104,7 +104,7 @@ describe("Place Controller functions", () => {
     });
 
     it("should return status 400 if place with same name already exists for the user", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
 
       await addPlace(reqMock, resMock);
 

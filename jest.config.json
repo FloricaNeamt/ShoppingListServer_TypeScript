@@ -6,5 +6,5 @@
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
   "collectCoverage": true,
-  "collectCoverageFrom": ["src/controllers/*.ts"]
+  "collectCoverageFrom": ["src/*/*.ts"]
 }

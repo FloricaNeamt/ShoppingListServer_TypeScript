@@ -9,6 +9,6 @@
     "target": "es6",
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/controllers/*"],
   "exclude": ["node_modules"]
 }

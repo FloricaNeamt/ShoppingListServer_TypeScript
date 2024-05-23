@@ -3,10 +3,11 @@ import { get, merge } from "lodash";
 import {
   UserSchema,
   createPlace,
-  getPlaceByUserAndName,
-  getPlacesForUser,
+  getPlaceByUserAndId,
+  getPlacesByUser,
   deletePlaceByName,
   updatePlaceByName,
+  getSortedPlacesByUser,
 } from "../db/places";
 
 export const getAllPlacesforLoggedUser = async (
@@ -16,7 +17,7 @@ export const getAllPlacesforLoggedUser = async (
   try {
     const currentUser = get(req, "identity") as typeof UserSchema;
     if (!currentUser) return res.sendStatus(403);
-    const places = await getPlacesForUser(currentUser);
+    const places = await getPlacesByUser(currentUser);
 
     return res.status(200).json(places).end();
   } catch (error) {
@@ -25,17 +26,32 @@ export const getAllPlacesforLoggedUser = async (
   }
 };
 
+export const getSortedPlacesforLoggedUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const currentUser = get(req, "identity") as typeof UserSchema;
+    if (!currentUser) return res.sendStatus(403);
+    const places = await getSortedPlacesByUser(currentUser);
+
+    return res.status(200).json(places).end();
+  } catch (error) {
+    //console.log(error);
+    return res.sendStatus(400);
+  }
+};
 export const addPlace = async (req: express.Request, res: express.Response) => {
   try {
-    const { name } = req.body;
+    const { id } = req.body;
 
-    if (!name) {
+    if (!id) {
       return res.sendStatus(400);
     }
 
     const user = get(req, "identity") as typeof UserSchema;
     if (!user) return res.sendStatus(403);
-    const existingPlace = await getPlaceByUserAndName(name, user);
+    const existingPlace = await getPlaceByUserAndId(user, id);
 
     if (existingPlace) {
       return res.sendStatus(400);

@@ -6,7 +6,7 @@ import {
   getUserByEmail,
 } from "../../../src/db/users";
 import { createHash } from "../../../src/helpers";
-import { mockUser } from "../dataMocks";
+import { mockUser } from "../../dataMocks";
 
 jest.mock("../../../src/db/users", () => ({
   getUserAuthentication: jest.fn(),

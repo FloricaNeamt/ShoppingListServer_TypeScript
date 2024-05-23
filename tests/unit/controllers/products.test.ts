@@ -5,7 +5,7 @@ import {
   getAllProducts,
   updateProduct,
 } from "./../../../src/controllers/products";
-import { getPlaceByUserAndName } from "../../../src/db/places";
+import { getPlaceByUserAndId } from "../../../src/db/places";
 import {
   getProductsByPlace,
   createProduct,
@@ -19,10 +19,10 @@ import {
   mockProducts,
   mockUpdatedProduct,
   mockUser,
-} from "./../dataMocks";
+} from "../../dataMocks";
 
 jest.mock("../../../src/db/places", () => ({
-  getPlaceByUserAndName: jest.fn(),
+  getPlaceByUserAndId: jest.fn(),
 }));
 
 jest.mock("../../../src/db/products", () => ({
@@ -63,7 +63,7 @@ describe("Products controller functions", () => {
   });
   describe("Get All Products function", () => {
     it("should return products for the specified place if successful", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductsByPlace as jest.Mock).mockResolvedValueOnce(mockProducts);
 
       await getAllProducts(reqMock, resMock);
@@ -88,7 +88,7 @@ describe("Products controller functions", () => {
     });
 
     it("should return status 404 if no products are found for the specified place", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductsByPlace as jest.Mock).mockResolvedValueOnce([]);
 
       await getAllProducts(reqMock, resMock);
@@ -100,7 +100,7 @@ describe("Products controller functions", () => {
     });
 
     it("should return status 400 if an error occurs", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockRejectedValueOnce(
+      (getPlaceByUserAndId as jest.Mock).mockRejectedValueOnce(
         new Error("Test error")
       );
 
@@ -112,7 +112,7 @@ describe("Products controller functions", () => {
 
   describe("Add Product function", () => {
     it("should create new product and return it if successful", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductByNameAndPlace as jest.Mock).mockResolvedValueOnce(undefined);
       (createProduct as jest.Mock).mockResolvedValueOnce(mockProduct);
 
@@ -174,7 +174,7 @@ describe("Products controller functions", () => {
     });
 
     it("should return status 400 if current place is not found", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(null);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(null);
 
       await addProduct(reqMock, resMock);
 
@@ -182,7 +182,7 @@ describe("Products controller functions", () => {
     });
 
     it("should return status 400 if product with the same name already exists for the current place", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductByNameAndPlace as jest.Mock).mockResolvedValueOnce(
         mockProduct
       );
@@ -193,7 +193,7 @@ describe("Products controller functions", () => {
     });
 
     it("should return status 400 if an error occurs", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductByNameAndPlace as jest.Mock).mockRejectedValueOnce(
         new Error("Test error")
       );
@@ -205,7 +205,7 @@ describe("Products controller functions", () => {
   });
   describe("Update Product function", () => {
     it("should update product and return it if successful", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductByNameAndPlace as jest.Mock).mockResolvedValueOnce(
         mockProduct
       );
@@ -283,7 +283,7 @@ describe("Products controller functions", () => {
       const mockCurrentPlace = {
         /* Mock current place object */
       };
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(
         mockCurrentPlace
       );
       (getProductByNameAndPlace as jest.Mock).mockResolvedValueOnce(null);
@@ -293,7 +293,7 @@ describe("Products controller functions", () => {
       expect(resMock.sendStatus).toHaveBeenCalledWith(400);
     });
     it("should return status 400 if an error occurs", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductByNameAndPlace as jest.Mock).mockRejectedValueOnce(
         new Error("Test error")
       );
@@ -310,7 +310,7 @@ describe("Products controller functions", () => {
         mockProduct
       );
       (deleteProductByName as jest.Mock).mockResolvedValueOnce(mockUser);
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
 
       await deleteProduct(reqMock, resMock);
 
@@ -354,7 +354,7 @@ describe("Products controller functions", () => {
     });
 
     it("should return status 400 if product does not exist for the current place", async () => {
-      (getPlaceByUserAndName as jest.Mock).mockResolvedValueOnce(mockPlace);
+      (getPlaceByUserAndId as jest.Mock).mockResolvedValueOnce(mockPlace);
       (getProductByNameAndPlace as jest.Mock).mockResolvedValueOnce(null);
 
       await deleteProduct(reqMock, resMock);

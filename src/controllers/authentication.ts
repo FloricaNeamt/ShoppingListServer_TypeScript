@@ -18,7 +18,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     const expectedHash = createHash(user.authentication.salt, password);
     if (user.authentication.password != expectedHash) {
-      res.sendStatus(403);
+      res.sendStatus(400);
     }
 
     const salt = random();

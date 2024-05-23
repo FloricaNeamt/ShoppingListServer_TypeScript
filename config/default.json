@@ -1,4 +1,4 @@
 {
   "name": "My Express App",
-  "db": "mongodb://127.0.0.1:27017/shoppingList_typeScript"
+  "db": "mongodb+srv://floricatarca:cLoiyyr9hwzEUGBN@cluster0.7h18wqn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/shoppingList_TypeScript"
 }

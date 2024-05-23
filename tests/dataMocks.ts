@@ -1,6 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 
+export const mockUserRegister = {
+  username: "FluffyPaws123",
+  email: "fluffy@example.com",
+  password: "[meowmeow]",
+};
 export const mockUser = {
   _id: new mongoose.Types.ObjectId().toHexString(),
   username: "FluffyPaws123",

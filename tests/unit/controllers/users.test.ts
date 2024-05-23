@@ -11,7 +11,7 @@ import {
   getUserBySessionToken,
   getUsers,
 } from "../../../src/db/users";
-import { mockUser1, mockUser2, mockUserId } from "../dataMocks";
+import { mockUser1, mockUser2, mockUserId } from "../../dataMocks";
 
 jest.mock("../../../src/db/users", () => ({
   deleteUserById: jest.fn(),
