@@ -27,9 +27,8 @@ export const getPlaceByUserAndName = (user: typeof UserSchema, name: String) =>
 export const getPlaceByUserAndId = (user: typeof UserSchema, _id: String) =>
   PlaceModel.findOne({ user, _id });
 
-export const createPlace = (values: Record<string, any>) => {
+export const createPlace = (values: Record<string, any>) =>
   new PlaceModel(values).save().then((place) => place.toObject());
-};
 
 export const deletePlaceByName = (name: String, user: typeof UserSchema) =>
   PlaceModel.findOneAndDelete({ name, user });

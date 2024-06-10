@@ -1,6 +1,7 @@
 import {
   addProduct,
   getAllProducts,
+  getProduct,
   deleteProduct,
   updateProduct,
 } from "../controllers/products";
@@ -11,7 +12,8 @@ const router = express.Router();
 
 export default (router: express.Router) => {
   router.get("/products", isAuthenticated, getAllProducts);
+  router.get("/products/:id", isAuthenticated, getProduct);
   router.post("/products", isAuthenticated, addProduct);
-  router.patch("/products/:name", isAuthenticated, updateProduct);
-  router.delete("/products/:name", isAuthenticated, deleteProduct);
+  router.patch("/products/:id", isAuthenticated, updateProduct);
+  router.delete("/products/:id", isAuthenticated, deleteProduct);
 };

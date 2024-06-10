@@ -3,7 +3,7 @@ import { get, merge } from "lodash";
 import {
   UserSchema,
   createPlace,
-  getPlaceByUserAndId,
+  getPlaceByUserAndName,
   getPlacesByUser,
   deletePlaceByName,
   updatePlaceByName,
@@ -43,15 +43,15 @@ export const getSortedPlacesforLoggedUser = async (
 };
 export const addPlace = async (req: express.Request, res: express.Response) => {
   try {
-    const { id } = req.body;
+    const { name } = req.body;
 
-    if (!id) {
+    if (!name) {
       return res.sendStatus(400);
     }
 
     const user = get(req, "identity") as typeof UserSchema;
     if (!user) return res.sendStatus(403);
-    const existingPlace = await getPlaceByUserAndId(user, id);
+    const existingPlace = await getPlaceByUserAndName(user, name);
 
     if (existingPlace) {
       return res.sendStatus(400);
